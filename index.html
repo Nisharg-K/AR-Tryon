@@ -1,120 +1,1133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Face AR – Glasses Try‑On with Multiple Frames</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionLux - Premium Eyewear</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            text-decoration: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(102,126,234,0.1)"/><stop offset="100%" stop-color="rgba(102,126,234,0)"/></radialGradient></defs><circle cx="200" cy="300" r="200" fill="url(%23a)"/><circle cx="800" cy="700" r="150" fill="url(%23a)"/><circle cx="600" cy="200" r="100" fill="url(%23a)"/></svg>') no-repeat center;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #86868b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: #1d1d1f;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .model-showcase {
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-placeholder {
+            width: 80%;
+            height: 80%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            background-image: url(https://media.fashionnetwork.com/cdn-cgi/image/fit=contain,width=1000,height=1000,format=auto/m/908c/a399/aa50/8dc2/4455/d528/2e3d/1b3f/f975/b605/b605.jpeg);
+            background-size: cover;
+            background-position: center;
+          }
+        /* Products Section */
+        .products-section {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glasses-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1d1d1f;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .try-on-button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .try-on-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* AR Try-on Modal */
+        .ar-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .ar-modal.active {
+            display: flex;
+        }
+
+        .ar-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #86868b;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1d1d1f;
+        }
+
+        /* AR Try-on Styles (adapted from original) */
+        .ar-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .ar-stage {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #ar-video, #ar-overlay {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ar-controls {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            font-size: 0.9rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ar-button {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .ar-button.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .ar-button.secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #1d1d1f;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .ar-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .ar-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Frame selector in AR modal */
+        .frame-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .frame-option {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .frame-option:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: #667eea;
+        }
+
+        .frame-option.selected {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+        }
+
+        .frame-preview {
+            width: 60px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .frame-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            color: #86868b;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Utility Classes */
+        .hidden { display: none; }
+        .text-center { text-align: center; }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="title">
-      <h1>Face AR – Glasses Try‑On with Multiple Frames</h1>
-      <span class="badge">WebGL + MediaPipe Face Mesh</span>
-      <span class="badge">PNG Frame Support</span>
-    </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">VisionLux</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="grid">
-      <section class="card">
-        <h2>Live Preview</h2>
-        <div class="stage" id="stage">
-          <video id="video" playsinline class="hidden"></video>
-          <canvas id="overlay"></canvas>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Premium Eyewear<br>Redefined</h1>
+                <p>Experience the future of glasses shopping with our revolutionary AR try-on technology. Find your perfect frame from the comfort of your home.</p>
+                <a href="#products" class="cta-button">Explore Collection</a>
+            </div>
+            <div class="hero-image">
+                <div class="model-showcase">
+                    <div class="model-placeholder">
+                        
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="controls">
-          <div class="row">
-            <button class="btn primary" id="startBtn">Start Camera</button>
-            <button class="btn" id="stopBtn" disabled>Stop</button>
-            <button class="btn" id="snapBtn" disabled>Capture</button>
-            <label class="switch"><input type="checkbox" id="debugToggle"><span>Show Landmarks</span></label>
-          </div>
-          <div class="row meter">
-            <label for="scale">Glasses scale</label>
-            <input type="range" min="0.6" max="1.8" value="1.0" step="0.02" id="scale">
-            <span id="scaleVal">1.00×</span>
-          </div>
-          <div class="row meter">
-            <label for="offsetX">Horizontal offset</label>
-            <input type="range" min="-30" max="30" value="0" step="1" id="offsetX">
-            <span id="offsetXVal">0px</span>
-          </div>
-          <div class="row meter">
-            <label for="tilt">Tilt adjustment</label>
-            <input type="range" min="-15" max="15" value="0" step="0.5" id="tilt">
-            <span id="tiltVal">0°</span>
-          </div>
-          <div class="row meter">
-            <label for="smooth">Stabilization</label>
-            <input type="range" min="0" max="0.9" value="0.6" step="0.05" id="smooth">
-            <span id="smoothVal">0.60</span>
-          </div>
-          <div class="row">
-            <span class="cred">All processing runs locally in your browser. No video is uploaded.</span>
-          </div>
-        </div>
-        <div class="foot">If video appears frozen, click <strong>Stop</strong> then <strong>Start</strong> again or check camera permissions.</div>
-      </section>
+    </section>
 
-      <aside class="card">
-        <div class="tabs">
-          <button class="tab active" data-tab="frames">Frames</button>
-          <button class="tab" data-tab="settings">Settings</button>
-          <button class="tab" data-tab="snapshots">Snapshots</button>
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="section-container">
+            <h2 class="section-title">Our Premium Collection</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="glasses3.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
+                    </div>
+                    <h3 class="product-name">Classic Aviator</h3>
+                    <p class="product-price">$299</p>
+                    <button class="try-on-button" onclick="openARTryOn('aviator')">Try On</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="glasses4.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
+                    </div>
+                    <h3 class="product-name">Modern Square</h3>
+                    <p class="product-price">$349</p>
+                    <button class="try-on-button" onclick="openARTryOn('square')">Try On</button>
+                </div>
+
+                
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="glasses2.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
+                    </div>
+                    <h3 class="product-name">Cat Eye Elegant</h3>
+                    <p class="product-price">$389</p>
+                    <button class="try-on-button" onclick="openARTryOn('cat-eye')">Try On</button>
+                </div>
+            </div>
         </div>
-        
-        <div class="aside">
-          <div class="tab-content active" id="frames-tab">
-            <div class="upload-area" id="uploadArea">
-              <div>📁 Drop PNG files here or click to browse</div>
-              <div class="notice">Upload transparent PNG glasses frames</div>
-              <input type="file" id="frameUpload" accept=".png" multiple>
+    </section>
+
+    <!-- AR Try-on Modal -->
+    <div class="ar-modal" id="arModal">
+        <div class="ar-container">
+            <div class="modal-header">
+                <h3 class="modal-title">AR Try-On Experience</h3>
+                <button class="close-button" onclick="closeARTryOn()">×</button>
             </div>
             
-            <div class="frame-picker" id="framePicker">
-              <!-- Frames will be added here -->
+            <div class="ar-grid">
+                <div class="ar-stage">
+                    <video id="ar-video" playsinline class="hidden"></video>
+                    <canvas id="ar-overlay"></canvas>
+                </div>
+                
+                <div class="ar-controls">
+                    <div class="control-buttons">
+                        <button class="ar-button primary" id="startArBtn">Start Camera</button>
+                        <button class="ar-button secondary" id="stopArBtn" disabled>Stop</button>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="arScale">Scale</label>
+                        <input type="range" id="arScale" min="0.6" max="1.8" value="1.0" step="0.02">
+                        <span id="arScaleVal">1.00×</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="arOffsetX">Horizontal Offset</label>
+                        <input type="range" id="arOffsetX" min="-30" max="30" value="0" step="1">
+                        <span id="arOffsetXVal">0px</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="arOffsetY">Vertical Offset</label>
+                        <input type="range" id="arOffsetY" min="-30" max="30" value="0" step="1">
+                        <span id="arOffsetYVal">0px</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Frame Selection</label>
+                        <div class="frame-selector">
+                            <div class="frame-option selected" data-frame="classic">
+                                <div class="frame-preview">👓</div>
+                                <div class="frame-name">Classic</div>
+                            </div>
+                            <div class="frame-option" data-frame="round">
+                                <div class="frame-preview">⭕</div>
+                                <div class="frame-name">Round</div>
+                            </div>
+                            <div class="frame-option" data-frame="square">
+                                <div class="frame-preview">⬛</div>
+                                <div class="frame-name">Square</div>
+                            </div>
+                            <div class="frame-option" data-frame="cat-eye">
+                                <div class="frame-preview">👁️</div>
+                                <div class="frame-name">Cat Eye</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          
-          <div class="tab-content" id="settings-tab">
-            <div class="row meter">
-              <label for="offsetY">Vertical (Y) offset</label>
-              <input type="range" min="-30" max="30" value="0" step="1" id="offsetY">
-              <span id="offsetYVal">0px</span>
-            </div>
-            <div class="row meter">
-              <label for="offsetX">Horizontal (X) offset</label>
-              <input type="range" min="-30" max="30" value="0" step="1" id="offsetX">
-              <span id="offsetXVal">0px</span>
-            </div>
-            <div class="row meter">
-              <label for="tilt">Tilt adjustment</label>
-              <input type="range" min="-15" max="15" value="0" step="0.5" id="tilt">
-              <span id="tiltVal">0°</span>
-            </div>
-            <div class="row meter">
-              <label for="scale">Scale</label>
-              <input type="range" min="0.6" max="2.0" value="1.0" step="0.02" id="scaleSettings">
-              <span id="scaleSettingsVal">1.00×</span>
-            </div>
-            <div class="notice">Fine-tune glasses positioning and size</div>
-          </div>
-          
-          <div class="tab-content" id="snapshots-tab">
-            <p class="notice">Use <em>Capture</em> to save frames. Images stay on this page.</p>
-            <div id="shots" class="snapshots"></div>
-          </div>
         </div>
-      </aside>
     </div>
-  </div>
 
-  <!-- Libraries: MediaPipe Face Mesh + helper utils -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js"></script>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 VisionLux. Premium eyewear with cutting-edge technology.</p>
+        </div>
+    </footer>
 
+    <!-- MediaPipe Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js"></script>
 
-  <script src="script.js"></script>
- 
+    <script>
+        // AR Try-on functionality
+        let arVideo, arOverlay, arCtx, faceMesh, camera;
+        let currentFrame = 'classic';
+        let isARActive = false;
+
+        // Initialize AR components
+        function initAR() {
+            arVideo = document.getElementById('ar-video');
+            arOverlay = document.getElementById('ar-overlay');
+            arCtx = arOverlay.getContext('2d');
+            
+            // Setup MediaPipe
+            faceMesh = new FaceMesh({
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/${file}`
+            });
+            
+            faceMesh.setOptions({
+                maxNumFaces: 1,
+                refineLandmarks: true,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5
+            });
+            
+            faceMesh.onResults(onARResults);
+            
+            // Setup controls
+            setupARControls();
+        }
+
+        function setupARControls() {
+            const startBtn = document.getElementById('startArBtn');
+            const stopBtn = document.getElementById('stopArBtn');
+            const scaleRange = document.getElementById('arScale');
+            const scaleVal = document.getElementById('arScaleVal');
+            const offsetXRange = document.getElementById('arOffsetX');
+            const offsetXVal = document.getElementById('arOffsetXVal');
+            const offsetYRange = document.getElementById('arOffsetY');
+            const offsetYVal = document.getElementById('arOffsetYVal');
+            
+            startBtn.addEventListener('click', startARCamera);
+            stopBtn.addEventListener('click', stopARCamera);
+            
+            scaleRange.addEventListener('input', () => {
+                scaleVal.textContent = `${Number(scaleRange.value).toFixed(2)}×`;
+            });
+            
+            offsetXRange.addEventListener('input', () => {
+                offsetXVal.textContent = `${Number(offsetXRange.value)}px`;
+            });
+            
+            offsetYRange.addEventListener('input', () => {
+                offsetYVal.textContent = `${Number(offsetYRange.value)}px`;
+            });
+            
+            // Frame selection
+            document.querySelectorAll('.frame-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    currentFrame = option.dataset.frame;
+                });
+            });
+        }
+
+        async function startARCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }
+                });
+                
+                arVideo.srcObject = stream;
+                await arVideo.play();
+                arVideo.classList.remove('hidden');
+                
+                camera = new Camera(arVideo, {
+                    onFrame: async () => {
+                        await faceMesh.send({ image: arVideo });
+                    },
+                    width: 1280,
+                    height: 720
+                });
+                
+                camera.start();
+                isARActive = true;
+                
+                document.getElementById('startArBtn').disabled = true;
+                document.getElementById('stopArBtn').disabled = false;
+                
+                fitARCanvas();
+            } catch (err) {
+                alert('Camera access failed: ' + err.message);
+                console.error(err);
+            }
+        }
+
+        function stopARCamera() {
+            if (camera) {
+                camera.stop();
+                camera = null;
+            }
+            
+            if (arVideo.srcObject) {
+                arVideo.srcObject.getTracks().forEach(track => track.stop());
+                arVideo.srcObject = null;
+            }
+            
+            isARActive = false;
+            arVideo.classList.add('hidden');
+            arCtx.clearRect(0, 0, arOverlay.width, arOverlay.height);
+            
+            document.getElementById('startArBtn').disabled = false;
+            document.getElementById('stopArBtn').disabled = true;
+        }
+
+        function fitARCanvas() {
+            const rect = arOverlay.getBoundingClientRect();
+            arOverlay.width = Math.max(320, Math.floor(rect.width));
+            arOverlay.height = Math.max(180, Math.floor(rect.height));
+        }
+
+        function onARResults(results) {
+            if (!isARActive) return;
+            
+            fitARCanvas();
+            const w = arOverlay.width, h = arOverlay.height;
+            arCtx.clearRect(0, 0, w, h);
+            
+            if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+                arCtx.fillStyle = '#86868b';
+                arCtx.textAlign = 'center';
+                arCtx.font = '16px -apple-system, BlinkMacSystemFont, sans-serif';
+                arCtx.fillText('No face detected. Please face the camera.', w/2, h/2);
+                return;
+            }
+            
+            const landmarks = results.multiFaceLandmarks[0];
+            drawVirtualGlasses(landmarks);
+        }
+
+        function drawVirtualGlasses(landmarks) {
+            const w = arOverlay.width, h = arOverlay.height;
+            const scale = Number(document.getElementById('arScale').value);
+            const offsetX = Number(document.getElementById('arOffsetX').value);
+            const offsetY = Number(document.getElementById('arOffsetY').value);
+            
+            // Key landmark points for glasses positioning
+            const LEFT_EYE_OUTER = 33;
+            const LEFT_EYE_INNER = 133;
+            const RIGHT_EYE_INNER = 362;
+            const RIGHT_EYE_OUTER = 263;
+            
+            const p = i => ({ x: landmarks[i].x * w, y: landmarks[i].y * h });
+            const L = p(LEFT_EYE_OUTER);
+            const Li = p(LEFT_EYE_INNER);
+            const Ri = p(RIGHT_EYE_INNER);
+            const R = p(RIGHT_EYE_OUTER);
+            
+            const eyeDist = Math.hypot(R.x - L.x, R.y - L.y);
+            const angle = Math.atan2(R.y - L.y, R.x - L.x);
+            const centerX = (L.x + R.x) / 2 + offsetX;
+            const centerY = (L.y + R.y) / 2 + offsetY;
+            
+            arCtx.save();
+            arCtx.translate(centerX, centerY);
+            arCtx.rotate(angle);
+            
+            drawFrameStyle(currentFrame, eyeDist, scale);
+            
+            arCtx.restore();
+        }
+
+        function drawFrameStyle(frameType, eyeDist, scale) {
+            const frameWidth = eyeDist * 1.8 * scale;
+            const frameHeight = frameWidth * 0.4;
+            const lensWidth = frameWidth * 0.35;
+            const lensHeight = frameHeight * 0.8;
+            const bridgeWidth = frameWidth * 0.15;
+            
+            arCtx.strokeStyle = '#333';
+            arCtx.lineWidth = Math.max(2, frameWidth * 0.02);
+            arCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            
+            switch(frameType) {
+                case 'classic':
+                    drawClassicFrame(lensWidth, lensHeight, bridgeWidth);
+                    break;
+                case 'round':
+                    drawRoundFrame(lensWidth, lensHeight, bridgeWidth);
+                    break;
+                case 'square':
+                    drawSquareFrame(lensWidth, lensHeight, bridgeWidth);
+                    break;
+                case 'cat-eye':
+                    drawCatEyeFrame(lensWidth, lensHeight, bridgeWidth);
+                    break;
+                case 'aviator':
+                    drawAviatorFrame(lensWidth, lensHeight, bridgeWidth);
+                    break;
+            }
+        }
+
+        function drawClassicFrame(lensWidth, lensHeight, bridgeWidth) {
+            const radius = Math.min(lensWidth, lensHeight) * 0.2;
+            
+            // Left lens
+            arCtx.beginPath();
+            roundedRect(arCtx, -lensWidth - bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight, radius);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Right lens
+            arCtx.beginPath();
+            roundedRect(arCtx, bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight, radius);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Bridge
+            arCtx.beginPath();
+            arCtx.moveTo(-bridgeWidth/2, 0);
+            arCtx.lineTo(bridgeWidth/2, 0);
+            arCtx.stroke();
+        }
+
+        function drawRoundFrame(lensWidth, lensHeight, bridgeWidth) {
+            const radius = Math.min(lensWidth, lensHeight) / 2;
+            
+            // Left lens
+            arCtx.beginPath();
+            arCtx.arc(-radius - bridgeWidth/2, 0, radius, 0, Math.PI * 2);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Right lens
+            arCtx.beginPath();
+            arCtx.arc(radius + bridgeWidth/2, 0, radius, 0, Math.PI * 2);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Bridge
+            arCtx.beginPath();
+            arCtx.moveTo(-bridgeWidth/2, 0);
+            arCtx.lineTo(bridgeWidth/2, 0);
+            arCtx.stroke();
+        }
+
+        function drawSquareFrame(lensWidth, lensHeight, bridgeWidth) {
+            // Left lens
+            arCtx.fillRect(-lensWidth - bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight);
+            arCtx.strokeRect(-lensWidth - bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight);
+            
+            // Right lens
+            arCtx.fillRect(bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight);
+            arCtx.strokeRect(bridgeWidth/2, -lensHeight/2, lensWidth, lensHeight);
+            
+            // Bridge
+            arCtx.beginPath();
+            arCtx.moveTo(-bridgeWidth/2, 0);
+            arCtx.lineTo(bridgeWidth/2, 0);
+            arCtx.stroke();
+        }
+
+        function drawCatEyeFrame(lensWidth, lensHeight, bridgeWidth) {
+            const leftCenterX = -lensWidth/2 - bridgeWidth/2;
+            const rightCenterX = lensWidth/2 + bridgeWidth/2;
+            
+            // Left lens (cat eye shape)
+            arCtx.beginPath();
+            arCtx.ellipse(leftCenterX, 0, lensWidth/2, lensHeight/2, -0.2, 0, Math.PI * 2);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Right lens (cat eye shape)
+            arCtx.beginPath();
+            arCtx.ellipse(rightCenterX, 0, lensWidth/2, lensHeight/2, 0.2, 0, Math.PI * 2);
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Bridge
+            arCtx.beginPath();
+            arCtx.moveTo(-bridgeWidth/2, 0);
+            arCtx.lineTo(bridgeWidth/2, 0);
+            arCtx.stroke();
+        }
+
+        function drawAviatorFrame(lensWidth, lensHeight, bridgeWidth) {
+            const leftCenterX = -lensWidth/2 - bridgeWidth/2;
+            const rightCenterX = lensWidth/2 + bridgeWidth/2;
+            
+            // Left lens (teardrop aviator)
+            arCtx.beginPath();
+            arCtx.arc(leftCenterX, -lensHeight*0.1, lensWidth*0.6, 0.3, Math.PI - 0.3);
+            arCtx.quadraticCurveTo(leftCenterX, lensHeight*0.5, leftCenterX - lensWidth*0.2, lensHeight*0.3);
+            arCtx.quadraticCurveTo(leftCenterX, lensHeight*0.7, leftCenterX + lensWidth*0.2, lensHeight*0.3);
+            arCtx.closePath();
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Right lens (teardrop aviator)
+            arCtx.beginPath();
+            arCtx.arc(rightCenterX, -lensHeight*0.1, lensWidth*0.6, 0.3, Math.PI - 0.3);
+            arCtx.quadraticCurveTo(rightCenterX, lensHeight*0.5, rightCenterX - lensWidth*0.2, lensHeight*0.3);
+            arCtx.quadraticCurveTo(rightCenterX, lensHeight*0.7, rightCenterX + lensWidth*0.2, lensHeight*0.3);
+            arCtx.closePath();
+            arCtx.fill();
+            arCtx.stroke();
+            
+            // Bridge
+            arCtx.beginPath();
+            arCtx.moveTo(-bridgeWidth/2, -lensHeight*0.1);
+            arCtx.lineTo(bridgeWidth/2, -lensHeight*0.1);
+            arCtx.stroke();
+        }
+
+        function roundedRect(ctx, x, y, width, height, radius) {
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+        }
+
+        // Modal functions
+        function openARTryOn(frameType = 'classic') {
+            currentFrame = frameType;
+            document.getElementById('arModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Update selected frame in modal
+            document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector(`[data-frame="${frameType}"]`)?.classList.add('selected');
+            
+            if (!faceMesh) {
+                initAR();
+            }
+        }
+
+        function closeARTryOn() {
+            document.getElementById('arModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            if (isARActive) {
+                stopARCamera();
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('arModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeARTryOn();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('arModal').classList.contains('active')) {
+                closeARTryOn();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scroll effect to navigation
+            let lastScrollY = window.scrollY;
+            const nav = document.querySelector('nav');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > lastScrollY && window.scrollY > 100) {
+                    nav.style.transform = 'translateY(-100%)';
+                } else {
+                    nav.style.transform = 'translateY(0)';
+                }
+                lastScrollY = window.scrollY;
+            });
+            
+            // Animate hero content
+            const heroContent = document.querySelector('.hero-content');
+            const heroImage = document.querySelector('.hero-image');
+            
+            setTimeout(() => {
+                heroContent.style.animation = 'fadeInUp 0.8s ease forwards';
+                heroImage.style.animation = 'fadeInUp 0.8s ease 0.2s forwards';
+            }, 100);
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe product cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.product-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
