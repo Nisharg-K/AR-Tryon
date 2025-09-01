@@ -1,4 +1,12 @@
-<!DOCTYPE html>
+/* Upload area styles */
+        .upload-area {
+            border: 2px dashed rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -179,7 +187,8 @@
             background-image: url(https://media.fashionnetwork.com/cdn-cgi/image/fit=contain,width=1000,height=1000,format=auto/m/908c/a399/aa50/8dc2/4455/d528/2e3d/1b3f/f975/b605/b605.jpeg);
             background-size: cover;
             background-position: center;
-          }
+        }
+
         /* Products Section */
         .products-section {
             padding: 6rem 2rem;
@@ -580,8 +589,7 @@
             <div class="hero-image">
                 <div class="model-showcase">
                     <div class="model-placeholder">
-                        
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -593,30 +601,26 @@
             <h2 class="section-title">Our Premium Collection</h2>
             <div class="products-grid">
                 <div class="product-card">
-                    <div class="product-image">
-                        <img src="glasses3.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
-                    </div>
-                    <h3 class="product-name">Classic Aviator</h3>
+                    <img src="glasses2.png" alt="" style="width:100%;height:200px;object-fit:contain;">
+                    <h3 class="product-name">Cat-Eye Elegant</h3>
                     <p class="product-price">$299</p>
                     <button class="try-on-button" onclick="openARTryOn('aviator')">Try On</button>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="glasses4.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
-                    </div>
-                    <h3 class="product-name">Modern Square</h3>
-                    <p class="product-price">$349</p>
-                    <button class="try-on-button" onclick="openARTryOn('square')">Try On</button>
                 </div>
 
                 
 
                 <div class="product-card">
-                    <div class="product-image">
-                        <img src="glasses2.png" alt="" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">
-                    </div>
-                    <h3 class="product-name">Cat Eye Elegant</h3>
+                    <img src="glasses3.png" alt="" style="width:100%;height:200px;object-fit:contain;">
+                    
+                    <h3 class="product-name">Classic Aviator</h3>
+                    <p class="product-price">$279</p>
+                    <button class="try-on-button" onclick="openARTryOn('round')">Try On</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="glasses4.png" alt="" style="width:100%;height:200px;object-fit:contain;">
+                    
+                    <h3 class="product-name">Modern Square</h3>
                     <p class="product-price">$389</p>
                     <button class="try-on-button" onclick="openARTryOn('cat-eye')">Try On</button>
                 </div>
@@ -663,24 +667,27 @@
                     </div>
                     
                     <div class="control-group">
+                        <label for="arStabilization">Stabilization</label>
+                        <input type="range" id="arStabilization" min="0" max="0.9" value="0.6" step="0.05">
+                        <span id="arStabilizationVal">0.60</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="arTilt">Tilt Adjustment</label>
+                        <input type="range" id="arTilt" min="-15" max="15" value="0" step="0.5">
+                        <span id="arTiltVal">0°</span>
+                    </div>
+                    
+                    <div class="control-group">
                         <label>Frame Selection</label>
-                        <div class="frame-selector">
-                            <div class="frame-option selected" data-frame="classic">
-                                <div class="frame-preview">👓</div>
-                                <div class="frame-name">Classic</div>
-                            </div>
-                            <div class="frame-option" data-frame="round">
-                                <div class="frame-preview">⭕</div>
-                                <div class="frame-name">Round</div>
-                            </div>
-                            <div class="frame-option" data-frame="square">
-                                <div class="frame-preview">⬛</div>
-                                <div class="frame-name">Square</div>
-                            </div>
-                            <div class="frame-option" data-frame="cat-eye">
-                                <div class="frame-preview">👁️</div>
-                                <div class="frame-name">Cat Eye</div>
-                            </div>
+                        <div class="frame-selector" id="frameSelector">
+                            <!-- Frames will be populated dynamically -->
+                        </div>
+                        
+                        <div class="upload-area" id="uploadArea">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">📁 Drop PNG files or click to browse</div>
+                            <div style="font-size: 0.8rem; color: #86868b;">Upload transparent PNG glasses frames</div>
+                            <input type="file" id="frameUpload" accept=".png" multiple style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -703,8 +710,11 @@
     <script>
         // AR Try-on functionality
         let arVideo, arOverlay, arCtx, faceMesh, camera;
-        let currentFrame = 'classic';
+        let currentFrameId = null;
+        let frames = new Map();
         let isARActive = false;
+        let smoothed = null;
+        let smoothFactor = 0.6;
 
         // Initialize AR components
         function initAR() {
@@ -726,8 +736,193 @@
             
             faceMesh.onResults(onARResults);
             
-            // Setup controls
+            // Setup controls and load frames
             setupARControls();
+            loadDefaultFrames();
+            setupFileUpload();
+        }
+
+        function loadDefaultFrames() {
+            const defaultFrames = [
+                { filename: 'glasses2.png', name: 'Classic Frame' },
+                { filename: 'glasses3.png', name: 'Modern Style' },
+                { filename: 'glasses4.png', name: 'Vintage Look' }
+            ];
+            
+            defaultFrames.forEach((frameData, index) => {
+                const img = new Image();
+                img.onload = () => {
+                    const frameId = frameData.filename.replace('.png', '');
+                    frames.set(frameId, {
+                        id: frameId,
+                        name: frameData.name,
+                        type: 'image',
+                        image: img
+                    });
+                    addFrameOption(frames.get(frameId));
+                    
+                    // Select first frame by default
+                    if (index === 0) {
+                        currentFrameId = frameId;
+                        setTimeout(() => {
+                            const frameElement = document.querySelector(`[data-frame-id="${frameId}"]`);
+                            if (frameElement) frameElement.classList.add('selected');
+                        }, 100);
+                    }
+                };
+                img.onerror = () => {
+                    console.warn(`Could not load ${frameData.filename}. Please ensure the file exists in the project directory.`);
+                    // Fallback to procedural frame
+                    const fallbackId = `fallback_${index}`;
+                    frames.set(fallbackId, {
+                        id: fallbackId,
+                        name: frameData.name,
+                        type: 'procedural',
+                        style: ['classic', 'round', 'square'][index] || 'classic'
+                    });
+                    addFrameOption(frames.get(fallbackId));
+                    
+                    if (index === 0) {
+                        currentFrameId = fallbackId;
+                        setTimeout(() => {
+                            const frameElement = document.querySelector(`[data-frame-id="${fallbackId}"]`);
+                            if (frameElement) frameElement.classList.add('selected');
+                        }, 100);
+                    }
+                };
+                img.src = frameData.filename;
+            });
+        }
+
+        function addFrameOption(frame) {
+            const frameSelector = document.getElementById('frameSelector');
+            const option = document.createElement('div');
+            option.className = 'frame-option';
+            option.dataset.frameId = frame.id;
+            
+            if (frame.type === 'image') {
+                option.innerHTML = `
+                    <div class="frame-preview">
+                        <img src="${frame.image.src}" style="width:100%;height:100%;object-fit:contain">
+                    </div>
+                    <div class="frame-name">${frame.name}</div>
+                `;
+            } else {
+                // Procedural frame preview
+                const canvas = document.createElement('canvas');
+                canvas.width = 80;
+                canvas.height = 40;
+                const ctx = canvas.getContext('2d');
+                drawProceduralPreview(ctx, frame.style, 80, 40);
+                
+                option.innerHTML = `
+                    <div class="frame-preview">
+                        <canvas width="80" height="40"></canvas>
+                    </div>
+                    <div class="frame-name">${frame.name}</div>
+                `;
+                
+                const optionCanvas = option.querySelector('canvas');
+                const optionCtx = optionCanvas.getContext('2d');
+                drawProceduralPreview(optionCtx, frame.style, 80, 40);
+            }
+            
+            option.addEventListener('click', () => selectFrame(frame.id));
+            frameSelector.appendChild(option);
+        }
+
+        function drawProceduralPreview(ctx, frameStyle, w, h) {
+            ctx.clearRect(0, 0, w, h);
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            
+            const centerY = h / 2;
+            const lensRadius = h * 0.25;
+            const leftX = w * 0.3;
+            const rightX = w * 0.7;
+            
+            switch(frameStyle) {
+                case 'classic':
+                    drawRoundedRect(ctx, leftX - lensRadius, centerY - lensRadius*0.6, lensRadius*2, lensRadius*1.2, 4);
+                    drawRoundedRect(ctx, rightX - lensRadius, centerY - lensRadius*0.6, lensRadius*2, lensRadius*1.2, 4);
+                    break;
+                case 'round':
+                    ctx.beginPath();
+                    ctx.arc(leftX, centerY, lensRadius, 0, Math.PI * 2);
+                    ctx.arc(rightX, centerY, lensRadius, 0, Math.PI * 2);
+                    ctx.stroke();
+                    break;
+                case 'square':
+                    ctx.strokeRect(leftX - lensRadius, centerY - lensRadius*0.6, lensRadius*2, lensRadius*1.2);
+                    ctx.strokeRect(rightX - lensRadius, centerY - lensRadius*0.6, lensRadius*2, lensRadius*1.2);
+                    break;
+            }
+            
+            // Bridge
+            ctx.beginPath();
+            ctx.moveTo(leftX + lensRadius, centerY);
+            ctx.lineTo(rightX - lensRadius, centerY);
+            ctx.stroke();
+        }
+
+        function drawRoundedRect(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        function selectFrame(frameId) {
+            currentFrameId = frameId;
+            document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
+            const selectedFrame = document.querySelector(`[data-frame-id="${frameId}"]`);
+            if (selectedFrame) selectedFrame.classList.add('selected');
+        }
+
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const frameUpload = document.getElementById('frameUpload');
+            
+            uploadArea.addEventListener('click', () => frameUpload.click());
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            frameUpload.addEventListener('change', (e) => handleFiles(e.target.files));
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type === 'image/png') {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const frameId = 'custom_' + Date.now();
+                            const frameName = file.name.replace(/\.(png|jpg|jpeg)$/i, '');
+                            frames.set(frameId, {
+                                id: frameId,
+                                name: frameName,
+                                type: 'image',
+                                image: img
+                            });
+                            addFrameOption(frames.get(frameId));
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
 
         function setupARControls() {
@@ -739,6 +934,10 @@
             const offsetXVal = document.getElementById('arOffsetXVal');
             const offsetYRange = document.getElementById('arOffsetY');
             const offsetYVal = document.getElementById('arOffsetYVal');
+            const stabilizationRange = document.getElementById('arStabilization');
+            const stabilizationVal = document.getElementById('arStabilizationVal');
+            const tiltRange = document.getElementById('arTilt');
+            const tiltVal = document.getElementById('arTiltVal');
             
             startBtn.addEventListener('click', startARCamera);
             stopBtn.addEventListener('click', stopARCamera);
@@ -755,14 +954,54 @@
                 offsetYVal.textContent = `${Number(offsetYRange.value)}px`;
             });
             
-            // Frame selection
-            document.querySelectorAll('.frame-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
-                    option.classList.add('selected');
-                    currentFrame = option.dataset.frame;
-                });
+            stabilizationRange.addEventListener('input', () => {
+                smoothFactor = Number(stabilizationRange.value);
+                stabilizationVal.textContent = `${smoothFactor.toFixed(2)}`;
             });
+            
+            tiltRange.addEventListener('input', () => {
+                tiltVal.textContent = `${Number(tiltRange.value)}°`;
+            });
+            
+            // Add resize listener for canvas
+            window.addEventListener('resize', () => {
+                if (isARActive) {
+                    fitARCanvas();
+                }
+            });
+            
+            tiltRange.addEventListener('input', () => {
+                tiltVal.textContent = `${Number(tiltRange.value)}°`;
+            });
+        }
+
+        // Optimized smoothing for key landmarks only
+        let smoothedKeyPoints = null;
+        const KEY_LANDMARKS = [33, 133, 362, 263]; // Only eye corner landmarks for glasses
+
+        function smoothLandmarks(raw) {
+            if (smoothFactor === 0) return raw; // Skip smoothing if disabled
+            
+            if (!smoothedKeyPoints) {
+                smoothedKeyPoints = {};
+                KEY_LANDMARKS.forEach(i => {
+                    smoothedKeyPoints[i] = {...raw[i]};
+                });
+                return raw;
+            }
+            
+            const a = smoothFactor;
+            const smoothed = [...raw]; // Copy all landmarks
+            
+            // Only smooth the key landmarks for performance
+            KEY_LANDMARKS.forEach(i => {
+                smoothedKeyPoints[i].x = smoothedKeyPoints[i].x * a + raw[i].x * (1 - a);
+                smoothedKeyPoints[i].y = smoothedKeyPoints[i].y * a + raw[i].y * (1 - a);
+                smoothedKeyPoints[i].z = smoothedKeyPoints[i].z * a + raw[i].z * (1 - a);
+                smoothed[i] = smoothedKeyPoints[i];
+            });
+            
+            return smoothed;
         }
 
         async function startARCamera() {
@@ -817,15 +1056,26 @@
 
         function fitARCanvas() {
             const rect = arOverlay.getBoundingClientRect();
-            arOverlay.width = Math.max(320, Math.floor(rect.width));
-            arOverlay.height = Math.max(180, Math.floor(rect.height));
+            const newWidth = Math.max(320, Math.floor(rect.width));
+            const newHeight = Math.max(180, Math.floor(rect.height));
+            
+            // Only resize if dimensions actually changed
+            if (arOverlay.width !== newWidth || arOverlay.height !== newHeight) {
+                arOverlay.width = newWidth;
+                arOverlay.height = newHeight;
+            }
         }
 
         function onARResults(results) {
             if (!isARActive) return;
             
-            fitARCanvas();
             const w = arOverlay.width, h = arOverlay.height;
+            
+            // Only fit canvas if window was resized
+            if (w === 0 || h === 0) {
+                fitARCanvas();
+            }
+            
             arCtx.clearRect(0, 0, w, h);
             
             if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
@@ -836,15 +1086,16 @@
                 return;
             }
             
-            const landmarks = results.multiFaceLandmarks[0];
+            const raw = results.multiFaceLandmarks[0];
+            const landmarks = smoothLandmarks(raw);
             drawVirtualGlasses(landmarks);
         }
 
         function drawVirtualGlasses(landmarks) {
             const w = arOverlay.width, h = arOverlay.height;
-            const scale = Number(document.getElementById('arScale').value);
-            const offsetX = Number(document.getElementById('arOffsetX').value);
-            const offsetY = Number(document.getElementById('arOffsetY').value);
+            const frame = frames.get(currentFrameId);
+            
+            if (!frame) return;
             
             // Key landmark points for glasses positioning
             const LEFT_EYE_OUTER = 33;
@@ -859,31 +1110,54 @@
             const R = p(RIGHT_EYE_OUTER);
             
             const eyeDist = Math.hypot(R.x - L.x, R.y - L.y);
-            const angle = Math.atan2(R.y - L.y, R.x - L.x);
+            const scale = Number(document.getElementById('arScale').value);
+            const offsetX = Number(document.getElementById('arOffsetX').value);
+            const offsetY = Number(document.getElementById('arOffsetY').value);
+            const tiltAdjust = Number(document.getElementById('arTilt').value) * (Math.PI / 180);
+            const baseAngle = Math.atan2(R.y - L.y, R.x - L.x);
+            const angle = baseAngle + tiltAdjust;
+            
             const centerX = (L.x + R.x) / 2 + offsetX;
             const centerY = (L.y + R.y) / 2 + offsetY;
             
             arCtx.save();
-            arCtx.translate(centerX, centerY);
-            arCtx.rotate(angle);
             
-            drawFrameStyle(currentFrame, eyeDist, scale);
+            if (frame.type === 'image') {
+                // Draw PNG frame
+                const frameWidth = eyeDist * 2.5 * scale;
+                const frameHeight = frameWidth * (frame.image.height / frame.image.width);
+                
+                arCtx.translate(centerX, centerY);
+                arCtx.rotate(angle);
+                arCtx.drawImage(
+                    frame.image,
+                    -frameWidth / 2,
+                    -frameHeight / 2,
+                    frameWidth,
+                    frameHeight
+                );
+            } else {
+                // Draw procedural frame
+                arCtx.translate(centerX, centerY);
+                arCtx.rotate(angle);
+                drawProceduralFrame(frame.style, eyeDist, scale);
+            }
             
             arCtx.restore();
         }
 
-        function drawFrameStyle(frameType, eyeDist, scale) {
+        function drawProceduralFrame(frameStyle, eyeDist, scale) {
             const frameWidth = eyeDist * 1.8 * scale;
             const frameHeight = frameWidth * 0.4;
             const lensWidth = frameWidth * 0.35;
             const lensHeight = frameHeight * 0.8;
             const bridgeWidth = frameWidth * 0.15;
             
-            arCtx.strokeStyle = '#333';
+            arCtx.strokeStyle = '#667eea';
             arCtx.lineWidth = Math.max(2, frameWidth * 0.02);
-            arCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            arCtx.fillStyle = 'rgba(102, 126, 234, 0.1)';
             
-            switch(frameType) {
+            switch(frameStyle) {
                 case 'classic':
                     drawClassicFrame(lensWidth, lensHeight, bridgeWidth);
                     break;
@@ -892,12 +1166,6 @@
                     break;
                 case 'square':
                     drawSquareFrame(lensWidth, lensHeight, bridgeWidth);
-                    break;
-                case 'cat-eye':
-                    drawCatEyeFrame(lensWidth, lensHeight, bridgeWidth);
-                    break;
-                case 'aviator':
-                    drawAviatorFrame(lensWidth, lensHeight, bridgeWidth);
                     break;
             }
         }
@@ -1027,18 +1295,31 @@
         }
 
         // Modal functions
-        function openARTryOn(frameType = 'classic') {
-            currentFrame = frameType;
+        function openARTryOn(frameType = 'glasses2') {
+            // Map product frame types to actual frame IDs
+            const frameMapping = {
+                'aviator': 'glasses2',
+                'square': 'glasses3', 
+                'round': 'glasses4',
+                'cat-eye': 'glasses2'
+            };
+            
+            const targetFrameId = frameMapping[frameType] || 'glasses2';
+            currentFrameId = targetFrameId;
+            
             document.getElementById('arModal').classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            // Update selected frame in modal
-            document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelector(`[data-frame="${frameType}"]`)?.classList.add('selected');
             
             if (!faceMesh) {
                 initAR();
             }
+            
+            // Update selected frame in modal after frames are loaded
+            setTimeout(() => {
+                document.querySelectorAll('.frame-option').forEach(opt => opt.classList.remove('selected'));
+                const targetFrame = document.querySelector(`[data-frame-id="${targetFrameId}"]`);
+                if (targetFrame) targetFrame.classList.add('selected');
+            }, 500);
         }
 
         function closeARTryOn() {
