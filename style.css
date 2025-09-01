@@ -1,0 +1,57 @@
+
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22d3ee; }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(1200px 600px at 20% -10%, #0b1024 0%, #0a0f23 35%, #060a18 100%), var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial}
+    .wrap{max-width:1200px;margin:24px auto;padding:16px}
+    .title{display:flex;gap:12px;align-items:center}
+    .title h1{font-size:20px;margin:0;font-weight:700}
+    .badge{font-size:12px;padding:4px 8px;border:1px solid #233455;border-radius:999px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
+    .card{background:linear-gradient(180deg,#0e152b 0%,#0c1224 100%);border:1px solid #1f2a44;border-radius:16px;box-shadow:0 6px 40px #0006;overflow:hidden}
+    .card h2{font-size:14px;font-weight:700;color:#c7d2fe;margin:0;padding:12px 14px;border-bottom:1px solid #1f2a44;background:#0b1329}
+    .stage{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:repeating-conic-gradient(from 90deg at 50% 50%,#0b122b 0 15deg,#0a0f24 15deg 30deg)}
+    video, canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .controls{display:grid;gap:12px;padding:12px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .row label{font-size:13px;color:var(--muted)}
+    .btn{appearance:none;border:1px solid #1f2a44;background:#0e162f;color:#e5e7eb;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;transition:.2s;box-shadow:inset 0 0 0 1px #0a1022}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px #0008,inset 0 0 0 1px #10204a}
+    .btn.primary{background:linear-gradient(180deg,#1b6d8f,#154a84);border-color:#22507a}
+    .btn.sm{padding:8px 10px;font-size:12px;border-radius:10px}
+    .aside{display:grid;gap:10px;padding:12px}
+    .notice{font-size:12px;color:#9ca3af}
+    
+    /* Tabs */
+    .tabs{display:flex;border-bottom:1px solid #1f2a44;margin:-12px -12px 12px -12px}
+    .tab{flex:1;padding:10px 14px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;transition:.2s}
+    .tab.active{color:#22d3ee;background:#0f1729;border-bottom:2px solid #22d3ee}
+    .tab:hover:not(.active){color:var(--text)}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    .switch input{appearance:none;width:42px;height:24px;background:#1f2a44;border-radius:999px;position:relative;outline:none;border:1px solid #2a3a61}
+    .switch input::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#93c5fd;transition:.2s}
+    .switch input:checked{background:#1b3c5f}
+    .switch input:checked::after{left:20px;background:#34d399}
+    .meter{display:flex;align-items:center;gap:8px}
+    .meter input[type=range]{width:100%}
+    .snapshots{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+    .shot{border-radius:12px;overflow:hidden;border:1px solid #243455}
+    .shot img{display:block;width:100%;height:auto}
+    .foot{padding:10px 14px;border-top:1px solid #1f2a44;background:#0b1329;color:#93c5fd;font-size:12px}
+    .blink{animation:blink 1.2s linear infinite}@keyframes blink{50%{opacity:.5}}
+    .cred{font-size:11px;color:#74829f}
+    .hidden{display:none}
+    
+    /* Frame picker styles */
+    .frame-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:12px}
+    .frame-option{border:2px solid #1f2a44;border-radius:12px;padding:8px;cursor:pointer;transition:.2s;background:#0b1329;text-align:center}
+    .frame-option:hover{border-color:#2563eb}
+    .frame-option.selected{border-color:#22d3ee;background:#0f1729}
+    .frame-preview{width:60px;height:30px;background:rgba(255,255,255,0.1);border-radius:8px;margin:0 auto 4px;position:relative;overflow:hidden}
+    .frame-preview canvas{width:100%;height:100%}
+    .frame-name{font-size:11px;color:var(--muted)}
+    .upload-area{border:2px dashed #1f2a44;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:12px}
+    .upload-area:hover{border-color:#2563eb;background:#0b1329}
+    .upload-area.dragover{border-color:#22d3ee;background:#0f1729}
+    #frameUpload{display:none}
